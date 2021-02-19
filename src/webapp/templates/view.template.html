@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+          integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous"/>
+
+    <title>Inverted Index</title>
+</head>
+<body>
+<div class="container p-5">
+    <h1 class="text-info">Inverted Index</h1>
+    <hr>
+    <br>
+    <h5>Number of terms = <span class="text-success">{{count}}</span></h5>
+    <h5>Time to index = <span class="text-danger">{{time}}</span> <span class="text-success">seconds</span></h5>
+    <h5>Size of the index = <span class="text-danger">{{size}}</span> <span class="text-success">KB</span></h5>
+    <table class="table table-striped">
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col">Term</th>
+            <th scope="col">Frequency</th>
+            <th scope="col">Postings</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for term in sorted_keys %}
+        <tr>
+            <td>{{term}}</td>
+            <td>{{content[term][0]}}</td>
+            <td>{{content[term][1]}}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
