@@ -12,7 +12,7 @@ import re
 app = Flask(__name__, static_folder=UPLOAD_FOLDER)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-model = TfIdf()
+statistic = TfIdf()
 
 
 def interpolate(precision):
@@ -51,10 +51,10 @@ def evaluate_engine() -> float:
     # find the cosine similarity and rank the retrieved documents
     for query_no, query in queries.items():
         ranking_heap = list()
-        for doc_id, norm in model.l2_norm.items():
+        for doc_id, norm in statistic.l2_norm.items():
             dot_prod = 0
             for word in filter(lambda token: len(token) > 0, re.split('[^a-z0-9\']', query.lower())):
-                value = model.tf_idf[word]
+                value = statistic.tf_idf[word]
                 if doc_id in value:
                     dot_prod += value[doc_id]
             # we use a min heap but negate the score to simulate a max heap
@@ -129,10 +129,10 @@ def plot_curves(precision_10, mean_interpolated_precision, mean_interpolated_rec
 
 def evaluate_query(query):
     ranking_heap = list()
-    for doc_id, norm in model.l2_norm.items():
+    for doc_id, norm in statistic.l2_norm.items():
         dot_prod = 0
         for word in filter(lambda token: len(token) > 0, re.split('[^a-z0-9\']', query.lower())):
-            value = model.tf_idf[word]
+            value = statistic.tf_idf[word]
             if doc_id in value:
                 dot_prod += value[doc_id]
         # we use a min heap but negate the score to simulate a max heap
@@ -176,5 +176,5 @@ def serve_evaluation_results():
 
 
 if __name__ == "__main__":
-    model.compute(DOCUMENT_SRC_FOLDER, "input_docs.txt", "stoplist.txt")
+    statistic.compute(DOCUMENT_SRC_FOLDER, "input_docs.txt", "stoplist.txt")
     app.run(host="localhost", port=8080)
