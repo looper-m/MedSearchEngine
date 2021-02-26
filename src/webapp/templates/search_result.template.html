@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+          integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous"/>
+
+    <title>Search Results</title>
+</head>
+<body>
+<div class="container p-5">
+    <h2 class="text-info">{{query}}</h2>
+    <hr>
+    <ul class="list-group">
+    {% for doc_id in documents %}
+        <li class="list-group-item">
+            <h5>{{doc_id}}</h5>
+        </li>
+    {% endfor %}
+    </ul>
+</div>
+</body>
+</html>

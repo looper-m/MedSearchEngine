@@ -1,18 +1,18 @@
 from flask import Flask, render_template, request, redirect, url_for, send_from_directory
 from werkzeug.utils import secure_filename
+from src.tokenizer import Tokenizer
+from src import indexer
+from src.webapp import UPLOAD_FOLDER
 import os
 import sys
 import time
-
-from src import tokenizer, indexer
-
-UPLOAD_FOLDER = './uploads'
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
 def generate_view(xml_filenames, stopword_filename):
+    tokenizer = Tokenizer()
     if len(stopword_filename) != 0:
         tokenizer.init_stoplist(os.path.join(app.config['UPLOAD_FOLDER'], stopword_filename))
     else:
@@ -21,7 +21,7 @@ def generate_view(xml_filenames, stopword_filename):
     start_time = time.time()
     tokens = list()
     for filename in xml_filenames:
-        tokens.extend(tokenizer.tokenize(os.path.join(app.config['UPLOAD_FOLDER'], filename)))
+        tokens.extend(tokenizer.tokenize_xml(os.path.join(app.config['UPLOAD_FOLDER'], filename)))
     inverted_index = indexer.generate_inverted_index(tokens)
 
     terms = sorted(list(inverted_index.keys()))
@@ -30,7 +30,7 @@ def generate_view(xml_filenames, stopword_filename):
     count = len(inverted_index)
 
     with open(os.path.join(app.config['UPLOAD_FOLDER'], 'inverted_index.html'), 'w') as fo:
-        fo.write(render_template("view.template.html", count=count, time=execution_time, size=size, sorted_keys=terms,
+        fo.write(render_template("inverted_index.template.html", count=count, time=execution_time, size=size, sorted_keys=terms,
                                  content=inverted_index))
 
 
